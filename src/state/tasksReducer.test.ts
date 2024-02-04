@@ -6,8 +6,10 @@ import {
     changeTaskStatusAC,
     changeTaskTitleAC,
     removeTaskAC,
-    tasksReducer
+    tasksReducer, setTasksAC
 } from "./tasksReduser";
+import {TaskType} from "../Todolist";
+import {TaskFromAPIType} from "../api/api";
 
 let initialState: allTasksType
 let todolistId1: string
@@ -41,7 +43,7 @@ beforeEach(() => {
 test("Correct task should be removed", () => {
 
     //data
-    const action:tasksActionType = removeTaskAC(todolistId1, taskId1_1)
+    const action: tasksActionType = removeTaskAC(todolistId1, taskId1_1)
 
     // action
     const updatedState: allTasksType = tasksReducer(initialState, action)
@@ -49,22 +51,51 @@ test("Correct task should be removed", () => {
     // expectation
     expect(updatedState[todolistId1].length).toBe(3)
     expect(updatedState[todolistId2].length).toBe(2)
-    expect(updatedState[todolistId1].every(t=>t.id!==taskId1_1)).toBeTruthy()
+    expect(updatedState[todolistId1].every(t => t.id !== taskId1_1)).toBeTruthy()
 
 })
 
 test("Correct task should be added", () => {
-    // data
-    const newTaskTitle: string = "Newly Added Task"
-    const action: tasksActionType = addTaskAC(todolistId2,newTaskTitle)
-    // action
-    const updatedState = tasksReducer(initialState, action)
-    // expectation
-    expect(updatedState[todolistId1].length).toBe(4)
-    expect(updatedState[todolistId2].length).toBe(3)
-    expect(updatedState[todolistId2][0].id).toBeDefined()
-    expect(updatedState[todolistId2][0].title).toBe(newTaskTitle)
-    expect(updatedState[todolistId2][0].isDone).toBe(false)
+
+    // DATA
+
+    const taskFromAPI: TaskFromAPIType = {
+        id: "d96ccc97-14c6-4197-b775-70b2bcea425f",
+        title: "New Task 1",
+        description: null,
+        todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+        order: -1,
+        status: 0,
+        priority: 1,
+        startDate: null,
+        deadline: null,
+        addedDate: "2024-01-28T17:14:09.183"
+    }
+
+    const todolistId:string = taskFromAPI.todoListId
+
+    const action = addTaskAC(todolistId, taskFromAPI)
+
+    // ACTIONS
+
+    const stateUpdated = tasksReducer({[todolistId]:[] } as allTasksType,action)
+
+    // EXPECTATIONS
+
+    expect(stateUpdated[todolistId].length).toBe(1)
+    expect(stateUpdated[todolistId][0]).toStrictEqual({
+        id: "d96ccc97-14c6-4197-b775-70b2bcea425f",
+        title: "New Task 1",
+        description: null,
+        todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+        order: -1,
+        status: 0,
+        priority: 1,
+        startDate: null,
+        deadline: null,
+        addedDate: "2024-01-28T17:14:09.183",
+        isDone:false // !!!!!!!!!
+    })
 
 })
 
@@ -95,3 +126,72 @@ test("Correct task title should be changed", () => {
 
 })
 
+test("Correct tasks should be set", () => {
+
+    // DATA
+
+    const tasksFromAPI: TaskFromAPIType[] = [
+        {
+            id: "d96ccc97-14c6-4197-b775-70b2bcea425f",
+            title: "New Task 1",
+            description: null,
+            todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+            order: -1,
+            status: 0,
+            priority: 1,
+            startDate: null,
+            deadline: null,
+            addedDate: "2024-01-28T17:14:09.183"
+        },
+        {
+            id: "8a0cd955-3201-4a11-a70b-332557403ed6",
+            title: "New Task 2",
+            description: null,
+            todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+            order: 0,
+            status: 0,
+            priority: 1,
+            startDate: null,
+            deadline: null,
+            addedDate: "2024-01-28T17:14:04.4"
+        }
+    ]
+
+    const todolistId = tasksFromAPI[0].todoListId
+
+    const action: tasksActionType = setTasksAC(todolistId, tasksFromAPI)
+
+    // action
+
+    const TasksStateSet = tasksReducer({}, action)
+
+    // expectation
+
+    expect(TasksStateSet[todolistId].length).toBe(2)
+    expect(TasksStateSet[todolistId][0]).toStrictEqual({
+        id: "d96ccc97-14c6-4197-b775-70b2bcea425f",
+        title: "New Task 1",
+        description: null,
+        todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+        order: -1,
+        status: 0,
+        priority: 1,
+        startDate: null,
+        deadline: null,
+        addedDate: "2024-01-28T17:14:09.183",
+        isDone: false // !!!!!!!!!!
+    })
+    expect(TasksStateSet[todolistId][1]).toStrictEqual({
+        id: "8a0cd955-3201-4a11-a70b-332557403ed6",
+        title: "New Task 2",
+        description: null,
+        todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+        order: 0,
+        status: 0,
+        priority: 1,
+        startDate: null,
+        deadline: null,
+        addedDate: "2024-01-28T17:14:04.4",
+        isDone: false // !!!!!!!!!!
+    })
+})

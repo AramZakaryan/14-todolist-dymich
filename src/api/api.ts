@@ -1,11 +1,28 @@
-import axios from "axios";
+import axios from "axios"
 
-export type TodolistType = {
+
+export type TodolistFromAPIType = {
     id: string
     title: string
     addedDate: string
     order: number
 }
+
+// let todolistsFromAPI: TodolistFromAPIType[] = [
+//     {
+//         id: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+//         title: "Changed Title by Api",
+//         addedDate: "2024-01-28T09:47:55.237",
+//         order: -4
+//     },
+//     {
+//         id: "6c10c194-f375-4b56-9a6a-af24aaca228b",
+//         title: "New Todolist",
+//         addedDate: "2024-01-28T09:47:39.72",
+//         order: -3
+//     }
+// ]
+
 
 type TodolistsUniversalResponseType<D = {}> = {
     data: D
@@ -15,7 +32,7 @@ type TodolistsUniversalResponseType<D = {}> = {
 }
 
 
-type GetTaskType = {
+export type TaskFromAPIType = {
     id: string
     title: string
     description: null | string
@@ -27,6 +44,33 @@ type GetTaskType = {
     deadline: null | string
     addedDate: string
 }
+
+// let tasksFromAPI: TaskFromAPIType[] = [
+//     {
+//         id: "d96ccc97-14c6-4197-b775-70b2bcea425f",
+//         title: "New Task",
+//         description: null,
+//         todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+//         order: -1,
+//         status: 0,
+//         priority: 1,
+//         startDate: null,
+//         deadline: null,
+//         addedDate: "2024-01-28T17:14:09.183"
+//     },
+//     {
+//         id: "8a0cd955-3201-4a11-a70b-332557403ed6",
+//         title: "New Task",
+//         description: null,
+//         todoListId: "c120798c-3062-4b8a-a1c9-0de81f13d59b",
+//         order: 0,
+//         status: 0,
+//         priority: 1,
+//         startDate: null,
+//         deadline: null,
+//         addedDate: "2024-01-28T17:14:04.4"
+//     }
+// ]
 
 export type UpdateTaskType = {
     // id: string
@@ -42,7 +86,7 @@ export type UpdateTaskType = {
 }
 
 type GetTasksResponseTypes = {
-    items: GetTaskType []
+    items: TaskFromAPIType []
     totalCount: number
     error: null | string
 }
@@ -63,14 +107,14 @@ const instance = axios.create({
 })
 
 
-export const todolistsAPI = {
+export const api = {
 
     getTodolists() {
-        return instance.get<TodolistType[]>("todo-lists")
+        return instance.get<TodolistFromAPIType[]>("todo-lists")
     },
     createTodolis(title: string) {
         return instance.post<TodolistsUniversalResponseType<{
-            item: TodolistType
+            item: TodolistFromAPIType
         }>>("todo-lists", {title})
     },
     deleteTodolist(todolistId: string) {
@@ -84,14 +128,14 @@ export const todolistsAPI = {
         return instance.get<GetTasksResponseTypes>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, taskTitle: string) {
-        return instance.post<TasksUniversalResponseType<GetTaskType>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle})
+        return instance.post<TasksUniversalResponseType<{item: TaskFromAPIType }>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle})
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<TasksUniversalResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
-    updateTask(todolistId: string, taskId: string, updateTaskModel:UpdateTaskType) {
-            return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`,updateTaskModel)
-        },
+    updateTask(todolistId: string, taskId: string, updateTaskModel: UpdateTaskType) {
+        return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, updateTaskModel)
+    },
 
 }
 

@@ -7,8 +7,6 @@ export type AddItemFormProps = {
 }
 export const AddItemForm = React.memo((props:AddItemFormProps) => {
 
-    console.log("AddItemForm runs")
-
     const [inpValue,
         setInpValue]
         = useState("")

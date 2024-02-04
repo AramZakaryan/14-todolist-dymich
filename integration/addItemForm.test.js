@@ -6,7 +6,7 @@ describe('addItemForm', () => {
 
         const image = await page.screenshot();
 
-        // API from jest-image-snapshot
+        // Api from jest-image-snapshot
         expect(image).toMatchImageSnapshot();
     });
 });

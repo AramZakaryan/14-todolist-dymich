@@ -1,6 +1,8 @@
-import {allTasksType, CondType, todolistType} from "../App";
+import {allTasksType} from "../App";
 import {v1} from "uuid";
-import {addTodolistActionType, remTodolistActionType, todolistId1, todolistId2} from "./todolistsReduser";
+import {addTodolistActionType, remTodolistActionType, setTodolistsType} from "./todolistsReduser";
+import {TaskFromAPIType} from "../api/api";
+import {TaskType} from "../Todolist";
 
 export type tasksActionType = removeTaskActionType
     | addTaskActionType
@@ -8,6 +10,9 @@ export type tasksActionType = removeTaskActionType
     | changeTaskTitleActionType
     | addTodolistActionType
     | remTodolistActionType
+    | setTodolistsType
+    | setTasksActionType
+
 
 type removeTaskActionType = ReturnType<typeof removeTaskAC>
 export const removeTaskAC = (todolistId: string, id: string) => ({
@@ -17,10 +22,10 @@ export const removeTaskAC = (todolistId: string, id: string) => ({
 }) as const
 
 type addTaskActionType = ReturnType<typeof addTaskAC>
-export const addTaskAC = (todolistId: string, title: string) => ({
+export const addTaskAC = (todolistId: string, taskFromAPI: TaskFromAPIType) => ({
     type: "ADD-TASK",
     todolistId,
-    taskTitle: title
+    taskFromAPI
 }) as const
 
 
@@ -41,19 +46,27 @@ export const changeTaskTitleAC = (todolistId: string, id: string, title: string)
     title
 }) as const
 
+type setTasksActionType = ReturnType<typeof setTasksAC>
+export const setTasksAC = (todolistId: string, tasksFromAPI: TaskFromAPIType[]) => ({
+    type: "SET-TASKS",
+    todolistId,
+    tasksFromAPI,
+}) as const
 
-const initialState: allTasksType = {
-    [todolistId1]: [
-        {id: v1(), title: "CSS & HTML", isDone: false},
-        {id: v1(), title: "JS", isDone: false},
-        {id: v1(), title: "React", isDone: false},
-        {id: v1(), title: "Redux", isDone: false}
-    ],
-    [todolistId2]: [
-        {id: v1(), title: "Book", isDone: false},
-        {id: v1(), title: "Milk", isDone: true},
-    ],
-}
+
+const initialState: allTasksType = {}
+// const initialState: allTasksType = {
+//     [todolistId1]: [
+//         {id: v1(), title: "CSS & HTML", isDone: false},
+//         {id: v1(), title: "JS", isDone: false},
+//         {id: v1(), title: "React", isDone: false},
+//         {id: v1(), title: "Redux", isDone: false}
+//     ],
+//     [todolistId2]: [
+//         {id: v1(), title: "Book", isDone: false},
+//         {id: v1(), title: "Milk", isDone: true},
+//     ],
+// }
 
 export const tasksReducer = (state: allTasksType = initialState, action: tasksActionType): allTasksType => {
     switch (action.type) {
@@ -65,16 +78,10 @@ export const tasksReducer = (state: allTasksType = initialState, action: tasksAc
                 )
             }
         case "ADD-TASK":
-            return {
-                ...state,
-                [action.todolistId]: [
-                    {id: v1(), title: action.taskTitle, isDone: false},
-                    ...state[action.todolistId]
-                ]
-            }
+            return {...state,
+            [action.todolistId]:[{...action.taskFromAPI, isDone:false} as TaskType,...state[action.todolistId]]}
         case "CHANGE-TASK-STATUS":
             return {
-
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t =>
                     t.id === action.taskId
@@ -108,7 +115,26 @@ export const tasksReducer = (state: allTasksType = initialState, action: tasksAc
             // return stateCopy
             const {[action.todolistId]: {}, ...restState} = state
             return restState
+        case "SET-TODOLISTS":
+            let stateCopy: allTasksType = {}
+            action.todolistsFromAPI.forEach(tl => {
+                stateCopy[tl.id] = []
+            })
+            return stateCopy
+        case "SET-TASKS":
+            return {
+                ...state,
+                [action.todolistId]: action.tasksFromAPI.map(t => ({
+                        ...t,
+                        isDone: false
+
+                    })
+                )
+            }
         default:
             return state
     }
 }
+
+
+

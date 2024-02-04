@@ -1,42 +1,18 @@
-import React, {useReducer, useState} from 'react';
+import React from 'react';
 import './App.css';
-import {TaskType, Todolist} from "./Todolist";
-import {v1} from "uuid";
-import {AddItemForm} from "./AddItemForm";
-import {
-    AppBar,
-    Autocomplete,
-    Box,
-    Button,
-    Container,
-    Grid,
-    IconButton, Paper,
-    TextField,
-    Toolbar,
-    Typography
-} from "@mui/material";
-import {Delete, DeleteForever, DeleteRounded, Menu} from '@mui/icons-material'
-import {
-    addTodolistAC,
-    changeFilterCondAC,
-    changeTodolistTitleAC,
-    remTodolistAC,
-    todolistsReducer
-} from "./state/todolistsReduser";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasksReduser";
 
 
-export type CondType = "All" | "Active" | "Completed"
-
-export type allTasksType = {
-    [key: string]: TaskType[]
-}
-
-export type todolistType = {
-    id: string
-    todolistTitle: string
-    filterCond: CondType
-}
+// export type CondType = "All" | "Active" | "Completed"
+//
+// export type allTasksType = {
+//     [key: string]: TaskType[]
+// }
+//
+// export type todolistType = {
+//     id: string
+//     todolistTitle: string
+//     filterCond: CondType
+// }
 
 //
 // function AppWithReducers() {

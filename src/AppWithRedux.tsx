@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {TaskType, Todolist} from "./Todolist";
 import {v1} from "uuid";
@@ -17,11 +17,14 @@ import {
     addTodolistAC,
     changeFilterCondAC,
     changeTodolistTitleAC,
-    remTodolistAC,
+    remTodolistAC, setTodolistsAC, todolistId1, todolistId2,
 } from "./state/todolistsReduser";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "./state/tasksReduser";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, setTasksAC} from "./state/tasksReduser";
 import {useDispatch, useSelector} from "react-redux";
 import {roofReducerType} from "./state/store";
+import {TaskFromAPIType, TodolistFromAPIType} from "./api/api";
+import {AnyAction, Dispatch} from "redux";
+import {addTaskTC, removeTaskTC, setTasksTC, setTodolistsTC} from "./state/thunks";
 
 
 export type CondType = "All" | "Active" | "Completed"
@@ -39,21 +42,27 @@ export type todolistType = {
 
 const AppWithRedux = React.memo(() => {
 
-        console.log("AppWithRedux runs")
 
-        const dispatch = useDispatch()
+        const dispatch: Dispatch<AnyAction> | any = useDispatch()
+
+        useEffect(() => {
+            dispatch(setTodolistsTC())
+        }, [])
+
 
         const todolists = useSelector<roofReducerType, todolistType[]>(state => state.todolists)
 
         const allTtasks = useSelector<roofReducerType, allTasksType>(state => state.tasks)
 
         const removeTask = useCallback((removeTaskId: string, todolistId: string) =>
-                dispatch(removeTaskAC(todolistId, removeTaskId)),
-            [dispatch])
+                // dispatch(removeTaskAC(todolistId, removeTaskId))
+                dispatch(removeTaskTC(todolistId, removeTaskId))
+            , [dispatch])
 
 
         const addTask = useCallback((newTaskTitle: string, todolistId: string) =>
-                dispatch(addTaskAC(todolistId, newTaskTitle))
+                dispatch(addTaskTC(todolistId,newTaskTitle))
+                // dispatch(addTaskAC(todolistId, newTaskTitle))
             , [dispatch])
 
 
@@ -89,7 +98,6 @@ const AppWithRedux = React.memo(() => {
 
         return (
             <div className="App">
-
                 <AppBar position="static">
                     <Toolbar>
                         <IconButton

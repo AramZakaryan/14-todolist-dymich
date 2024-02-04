@@ -1,10 +1,12 @@
 import {CondType, todolistType} from "../App";
 import {v1} from "uuid";
+import {TodolistFromAPIType} from "../api/api";
 
 export type todolistActionType = remTodolistActionType
     | addTodolistActionType
     | changeTodolistTitleActionType
     | changeFilterCondActionType
+    | setTodolistsType
 
 export type remTodolistActionType = ReturnType<typeof remTodolistAC>
 export const remTodolistAC = (todolistId: string) => ({
@@ -33,13 +35,24 @@ export const changeFilterCondAC = (todolistId: string, updatedFilterCond: CondTy
     updatedFilterCond
 }) as const
 
+export type setTodolistsType = ReturnType<typeof setTodolistsAC>
+// export const setTodolistsAC = (todolistsFromAPI: TodolistFromAPIType[]) => ({
+export const setTodolistsAC = (todolistsFromAPI: TodolistFromAPIType[]) => ({
+    type: "SET-TODOLISTS",
+    todolistsFromAPI
+}) as const
+
+
 export const todolistId1 = v1()
 export const todolistId2 = v1()
 
-const initialState: todolistType[] = [
-    {id: todolistId1, todolistTitle: "What to learn?", filterCond: "All"},
-    {id: todolistId2, todolistTitle: "What to buy?", filterCond: "All"}
-]
+// const initialState: todolistType[] = [
+//     {id: todolistId1, todolistTitle: "What to learn?", filterCond: "All"},
+//     {id: todolistId2, todolistTitle: "What to buy?", filterCond: "All"}
+// ]
+
+const initialState: todolistType[] = []
+
 
 export const todolistsReducer = (state: todolistType[] = initialState, action: todolistActionType): todolistType[] => {
     switch (action.type) {
@@ -70,6 +83,8 @@ export const todolistsReducer = (state: todolistType[] = initialState, action: t
             } else {
                 throw new Error("todolist.id is not correct, so todolist filterCond cannot be changed")
             }
+        case "SET-TODOLISTS":
+            return action.todolistsFromAPI.map(tl => ({...tl, todolistTitle: tl.title, filterCond: "All"}))
         default:
             return state
     }

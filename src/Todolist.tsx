@@ -1,10 +1,15 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {CondType} from "./App";
 import {AddItemForm} from "./AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, IconButton} from "@mui/material";
 import {Delete} from "@mui/icons-material";
 import {Task} from "./Task";
+import {useDispatch} from "react-redux";
+import {setTasksAC} from "./state/tasksReduser";
+import {TaskFromAPIType} from "./api/api";
+import {AnyAction, Dispatch} from "redux";
+import {setTasksTC} from "./state/thunks";
 
 export type TaskType = {
     id: string
@@ -39,8 +44,13 @@ export const Todolist = React.memo(
         }
             = props
 
+        const dispatch:Dispatch<AnyAction> | any= useDispatch()
 
-        console.log("Todolist runs.")
+        useEffect(() => {
+
+            dispatch(setTasksTC(todolistId))
+
+        }, [])
 
         const AllBtnOnClickHandler = useCallback(() =>
                 // props.changeFilterCond("All", props.todolistId)
