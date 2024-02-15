@@ -112,10 +112,8 @@ export const api = {
     getTodolists() {
         return instance.get<TodolistFromAPIType[]>("todo-lists")
     },
-    createTodolis(title: string) {
-        return instance.post<TodolistsUniversalResponseType<{
-            item: TodolistFromAPIType
-        }>>("todo-lists", {title})
+    createTodolist(title: string) {
+        return instance.post<TodolistsUniversalResponseType<{ item: TodolistFromAPIType }>>("todo-lists", {title})
     },
     deleteTodolist(todolistId: string) {
         return instance.delete<TodolistsUniversalResponseType>(`todo-lists/${todolistId}`)
@@ -128,7 +126,7 @@ export const api = {
         return instance.get<GetTasksResponseTypes>(`todo-lists/${todolistId}/tasks`)
     },
     createTask(todolistId: string, taskTitle: string) {
-        return instance.post<TasksUniversalResponseType<{item: TaskFromAPIType }>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle})
+        return instance.post<TasksUniversalResponseType<{ item: TaskFromAPIType }>>(`todo-lists/${todolistId}/tasks`, {title: taskTitle})
     },
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<TasksUniversalResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
@@ -138,5 +136,6 @@ export const api = {
     },
 
 }
+
 
 

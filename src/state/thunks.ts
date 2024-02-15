@@ -1,15 +1,28 @@
 import {Dispatch} from "redux";
 import {api} from "../api/api";
-import {setTodolistsAC} from "./todolistsReduser";
+import {addTodolistAC, remTodolistAC, setTodolistsAC} from "./todolistsReduser";
 import {addTaskAC, removeTaskAC, setTasksAC} from "./tasksReduser";
 import {useDispatch} from "react-redux";
 
 
 // TODOLISTS THUNK CREATORS
+
 export const setTodolistsTC = () => (dispatch: Dispatch) => {
     api.getTodolists()
         .then(response => dispatch(setTodolistsAC(response.data)))
 }
+
+export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+    api.deleteTodolist(todolistId)
+        .then(() => dispatch(remTodolistAC(todolistId)))
+}
+
+export const addTodolistTC = (todolistTitle: string) => (dispatch: Dispatch) => {
+    api.createTodolist(todolistTitle)
+        // .then(response => console.log(response.data.data.item))
+        .then(response => dispatch(addTodolistAC(response.data.data.item)))
+}
+
 
 
 // TASKS THUNK CREATORS

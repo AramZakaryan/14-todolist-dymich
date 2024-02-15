@@ -24,7 +24,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {roofReducerType} from "./state/store";
 import {TaskFromAPIType, TodolistFromAPIType} from "./api/api";
 import {AnyAction, Dispatch} from "redux";
-import {addTaskTC, removeTaskTC, setTasksTC, setTodolistsTC} from "./state/thunks";
+import {addTaskTC, addTodolistTC, removeTaskTC, removeTodolistTC, setTasksTC, setTodolistsTC} from "./state/thunks";
 
 
 export type CondType = "All" | "Active" | "Completed"
@@ -82,12 +82,14 @@ const AppWithRedux = React.memo(() => {
 
 
         const addTodolist = useCallback((title: string) =>
-                dispatch(addTodolistAC(title, v1()))
+            // {}
+            dispatch(addTodolistTC(title))
+                // dispatch(addTodolistAC(title, v1()))
             , [dispatch])
 
-        const removeTodolist = useCallback(function (todolistId: string) {
-                dispatch(remTodolistAC(todolistId))
-            }
+        const removeTodolist = useCallback((todolistId: string) =>
+                // dispatch(remTodolistAC(todolistId))
+                dispatch(removeTodolistTC(todolistId))
             , [dispatch])
 
 

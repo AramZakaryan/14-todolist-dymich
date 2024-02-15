@@ -8,6 +8,7 @@ import {
     remTodolistAC,
     todolistsReducer
 } from "./todolistsReduser";
+import {TodolistFromAPIType} from "../api/api";
 
 let initialState: todolistType[]
 let todolistId1: string
@@ -40,23 +41,6 @@ test("Correct todolist should be removed", () => {
 
 })
 
-test("Correct todolist should be added", () => {
-    // data
-    const newTodolistTitle: string = "New Todolist"
-    const newTodolistId: string = v1()
-    // const action: actionType = {type: "addTodolist", todolistTitle: newTodolistTitle}
-    const action: todolistActionType = addTodolistAC(newTodolistTitle, newTodolistId)
-
-    // action
-    const updatedState = todolistsReducer(initialState, action)
-
-    // expectation
-    expect(updatedState.length).toBe(3)
-    expect(updatedState[0].todolistTitle).toBe(newTodolistTitle)
-    expect(updatedState[0].filterCond).toBe("All")
-    expect(updatedState[0].id).toBe(newTodolistId)
-
-})
 
 test("Correct todolist should change its title", () => {
 

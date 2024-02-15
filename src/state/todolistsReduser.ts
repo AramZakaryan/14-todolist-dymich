@@ -15,10 +15,9 @@ export const remTodolistAC = (todolistId: string) => ({
 }) as const
 
 export type addTodolistActionType = ReturnType<typeof addTodolistAC>
-export const addTodolistAC = (todolistTitle: string, todolistId: string) => ({
+export const addTodolistAC = (todolistFromAPI:TodolistFromAPIType) => ({
     type: "ADD-TODOLIST",
-    todolistId,
-    todolistTitle
+    todolistFromAPI,
 }) as const
 
 type changeTodolistTitleActionType = ReturnType<typeof changeTodolistTitleAC>
@@ -61,9 +60,9 @@ export const todolistsReducer = (state: todolistType[] = initialState, action: t
         case "ADD-TODOLIST":
             return [
                 {
-                    id: action.todolistId,
-                    todolistTitle: action.todolistTitle,
-                    filterCond: "All"
+                    todolistTitle: action.todolistFromAPI.title,
+                    filterCond: "All",
+                    ... action.todolistFromAPI
                 },
                 ...state
             ]
