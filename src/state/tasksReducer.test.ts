@@ -42,13 +42,16 @@ beforeEach(() => {
 
 test("Correct task should be removed", () => {
 
-    //data
+    // DATA
+
     const action: tasksActionType = removeTaskAC(todolistId1, taskId1_1)
 
-    // action
+    // ACTIONS
+
     const updatedState: allTasksType = tasksReducer(initialState, action)
 
-    // expectation
+    // EXPECTATIONS
+
     expect(updatedState[todolistId1].length).toBe(3)
     expect(updatedState[todolistId2].length).toBe(2)
     expect(updatedState[todolistId1].every(t => t.id !== taskId1_1)).toBeTruthy()

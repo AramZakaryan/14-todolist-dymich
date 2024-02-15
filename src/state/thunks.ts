@@ -19,7 +19,6 @@ export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch) => 
 
 export const addTodolistTC = (todolistTitle: string) => (dispatch: Dispatch) => {
     api.createTodolist(todolistTitle)
-        // .then(response => console.log(response.data.data.item))
         .then(response => dispatch(addTodolistAC(response.data.data.item)))
 }
 
@@ -38,3 +37,4 @@ export const removeTaskTC = (todolistId: string, taskId:string) => (dispatch: Di
 export const addTaskTC = (todolistId:string, newTaskTitle:string) => (dispatch: Dispatch) =>
     api.createTask(todolistId,newTaskTitle)
         .then (response=>dispatch(addTaskAC(todolistId,response.data.data.item)))
+

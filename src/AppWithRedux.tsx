@@ -82,9 +82,7 @@ const AppWithRedux = React.memo(() => {
 
 
         const addTodolist = useCallback((title: string) =>
-            // {}
             dispatch(addTodolistTC(title))
-                // dispatch(addTodolistAC(title, v1()))
             , [dispatch])
 
         const removeTodolist = useCallback((todolistId: string) =>
