@@ -69,18 +69,18 @@ const AppWithRedux = React.memo(() => {
 
 
         const addTask = useCallback((newTaskTitle: string, todolistId: string) =>
-                dispatch(addTaskTC(todolistId,newTaskTitle))
-                // dispatch(addTaskAC(todolistId, newTaskTitle))
+                dispatch(addTaskTC(todolistId, newTaskTitle))
+            // dispatch(addTaskAC(todolistId, newTaskTitle))
             , [dispatch])
 
 
         const changeTaskStatus = useCallback((changeTaskID: string, changeTaskIsDone: boolean, todolistId: string) =>
-            dispatch(updateTaskTC(todolistId,changeTaskID,{status:changeTaskIsDone?2:0}))
+                dispatch(updateTaskTC(todolistId, changeTaskID, {status: changeTaskIsDone ? 2 : 0}))
             , [dispatch])
 
 
         const changeTaskTitle = useCallback((todolistId: string, taskId: string, changedTaskTitle: string) =>
-            dispatch(updateTaskTC(todolistId,taskId,{title:changedTaskTitle}))
+                dispatch(updateTaskTC(todolistId, taskId, {title: changedTaskTitle}))
             , [dispatch])
 
 
@@ -90,7 +90,7 @@ const AppWithRedux = React.memo(() => {
 
 
         const addTodolist = useCallback((title: string) =>
-            dispatch(addTodolistTC(title))
+                dispatch(addTodolistTC(title))
             , [dispatch])
 
         const removeTodolist = useCallback((todolistId: string) =>
@@ -101,7 +101,7 @@ const AppWithRedux = React.memo(() => {
 
         const changeTodolistTitle = useCallback((todolistId: string, changedTodolistTitle: string) =>
                 // dispatch(changeTodolistTitleAC(todolistId, changedTodolistTitle))
-            dispatch(changeTodolistTitleTC(todolistId,changedTodolistTitle))
+                dispatch(changeTodolistTitleTC(todolistId, changedTodolistTitle))
             , [dispatch])
 
 
@@ -160,3 +160,5 @@ const AppWithRedux = React.memo(() => {
 )
 
 export default AppWithRedux;
+
+
