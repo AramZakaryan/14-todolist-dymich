@@ -53,32 +53,26 @@ export const Todolist = React.memo(
         }, [])
 
         const AllBtnOnClickHandler = useCallback(() =>
-                // props.changeFilterCond("All", props.todolistId)
                 changeFilterCond("All", todolistId)
             , [changeFilterCond, todolistId])
 
         const ActiveBtnOnClickHandler = useCallback(() =>
-                // props.changeFilterCond("Active", props.todolistId)
                 changeFilterCond("Active", todolistId)
             , [changeFilterCond, todolistId])
 
         const CompletedBtnOnClickHandler = useCallback(() =>
-                // props.changeFilterCond("Completed", props.todolistId)
                 changeFilterCond("Completed", todolistId)
             , [changeFilterCond, todolistId])
 
         const removeTodolistHandler = useCallback(() =>
-                // props.removeTodolist(props.todolistId)
                 removeTodolist(todolistId)
             , [removeTodolist, todolistId])
 
         const addTaskIntermediary = useCallback((newTaskTitle: string) =>
-                // props.addTask(newTaskTitle, props.todolistId)
                 addTask(newTaskTitle, todolistId)
             , [addTask, todolistId])
 
         const changeTodolistTitleIntermediary = useCallback((todolistTitle: string) =>
-                // props.changeTodolistTitle(props.todolistId, todolistTitle)
                 changeTodolistTitle(todolistId, todolistTitle)
             , [changeTodolistTitle, todolistId])
 
