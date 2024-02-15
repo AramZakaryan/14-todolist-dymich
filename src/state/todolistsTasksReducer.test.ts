@@ -3,8 +3,7 @@ import {v1} from "uuid";
 import {
     tasksActionType,
     addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
+    updateTaskAC,
     removeTaskAC,
     tasksReducer
 } from "./tasksReduser";

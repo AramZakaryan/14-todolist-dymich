@@ -3,8 +3,7 @@ import {v1} from "uuid";
 import {
     tasksActionType,
     addTaskAC,
-    changeTaskStatusAC,
-    changeTaskTitleAC,
+    updateTaskAC,
     removeTaskAC,
     tasksReducer, setTasksAC
 } from "./tasksReduser";
@@ -105,7 +104,7 @@ test("Correct task should be added", () => {
 test("Correct task status should be changed", () => {
 
     // data
-    const action: tasksActionType = changeTaskStatusAC(todolistId1, taskId1_2, true)
+    const action: tasksActionType = updateTaskAC(todolistId1, taskId1_2, {isDone:true})
 
     // action
     const updatedState = tasksReducer(initialState, action)
@@ -119,7 +118,7 @@ test("Correct task title should be changed", () => {
 
     // data
     const newTitle = "New Title"
-    const action: tasksActionType = changeTaskTitleAC(todolistId1, taskId1_2, newTitle)
+    const action: tasksActionType = updateTaskAC(todolistId1, taskId1_2, {title:newTitle})
 
     // action
     const updatedState = tasksReducer(initialState, action)

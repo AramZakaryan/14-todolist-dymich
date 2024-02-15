@@ -100,7 +100,7 @@ export const Todolist = React.memo(
                         todolistId={props.todolistId}
                         removeTask={props.removeTask}
                         changeStatus={props.changeStatus}
-                        changeTaskTitle={props.changeTodolistTitle}
+                        changeTaskTitle={props.changeTaskTitle}
                         task={t}
                     />
                 )

@@ -132,7 +132,7 @@ export const api = {
         return instance.delete<TasksUniversalResponseType>(`todo-lists/${todolistId}/tasks/${taskId}`)
     },
     updateTask(todolistId: string, taskId: string, updateTaskModel: UpdateTaskType) {
-        return instance.put(`todo-lists/${todolistId}/tasks/${taskId}`, updateTaskModel)
+        return instance.put<TasksUniversalResponseType<{ item: TaskFromAPIType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, updateTaskModel)
     },
 
 }

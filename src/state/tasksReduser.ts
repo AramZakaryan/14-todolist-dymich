@@ -6,8 +6,7 @@ import {TaskType} from "../Todolist";
 
 export type tasksActionType = removeTaskActionType
     | addTaskActionType
-    | changeTaskStatusActionType
-    | changeTaskTitleActionType
+    | updateTaskActionType
     | addTodolistActionType
     | remTodolistActionType
     | setTodolistsType
@@ -29,22 +28,27 @@ export const addTaskAC = (todolistId: string, taskFromAPI: TaskFromAPIType) => (
 }) as const
 
 
-type changeTaskStatusActionType = ReturnType<typeof changeTaskStatusAC>
-export const changeTaskStatusAC = (todolistId: string, id: string, isDone: boolean) => ({
-    type: "CHANGE-TASK-STATUS",
+type updateTaskActionType = ReturnType<typeof updateTaskAC>
+
+export type UpdateTaskActionCreatorType = {
+    title?: string
+    isDone?: boolean
+}
+export const updateTaskAC = (todolistId: string, id: string, modelForAction:UpdateTaskActionCreatorType) => ({
+    type: "UPDATE-TASK",
     todolistId,
     taskId: id,
-    taskIsDone: isDone
+    modelForAction
 }) as const
 
-type changeTaskTitleActionType = ReturnType<typeof changeTaskTitleAC>
+// type changeTaskTitleActionType = ReturnType<typeof updateTaskAC>
 
-export const changeTaskTitleAC = (todolistId: string, id: string, title: string) => ({
-    type: "CHANGE-TASK-TITLE",
-    todolistId,
-    id,
-    title
-}) as const
+// export const updateTaskAC = (todolistId: string, id: string, title: string) => ({
+//     type: "CHANGE-TASK-TITLE",
+//     todolistId,
+//     id,
+//     title
+// }) as const
 
 type setTasksActionType = ReturnType<typeof setTasksAC>
 export const setTasksAC = (todolistId: string, tasksFromAPI: TaskFromAPIType[]) => ({
@@ -80,26 +84,14 @@ export const tasksReducer = (state: allTasksType = initialState, action: tasksAc
         case "ADD-TASK":
             return {...state,
             [action.todolistId]:[{...action.taskFromAPI, isDone:false} as TaskType,...state[action.todolistId]]}
-        case "CHANGE-TASK-STATUS":
+        case "UPDATE-TASK":
             return {
                 ...state,
                 [action.todolistId]: state[action.todolistId].map(t =>
                     t.id === action.taskId
                         ? {
                             ...t,
-                            isDone: action.taskIsDone
-                        }
-                        : t
-                )
-            }
-        case "CHANGE-TASK-TITLE":
-            return {
-                ...state,
-                [action.todolistId]: state[action.todolistId].map(t =>
-                    t.id === action.id
-                        ? {
-                            ...t,
-                            title: action.title
+                            ...action.modelForAction
                         }
                         : t
                 )

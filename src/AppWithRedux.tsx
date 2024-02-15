@@ -19,12 +19,20 @@ import {
     changeTodolistTitleAC,
     remTodolistAC, setTodolistsAC, todolistId1, todolistId2,
 } from "./state/todolistsReduser";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, setTasksAC} from "./state/tasksReduser";
+import {addTaskAC, updateTaskAC, removeTaskAC, setTasksAC} from "./state/tasksReduser";
 import {useDispatch, useSelector} from "react-redux";
 import {roofReducerType} from "./state/store";
 import {TaskFromAPIType, TodolistFromAPIType} from "./api/api";
 import {AnyAction, Dispatch} from "redux";
-import {addTaskTC, addTodolistTC, removeTaskTC, removeTodolistTC, setTasksTC, setTodolistsTC} from "./state/thunks";
+import {
+    addTaskTC,
+    addTodolistTC,
+    changeTodolistTitleTC,
+    removeTaskTC,
+    removeTodolistTC,
+    setTasksTC,
+    setTodolistsTC, updateTaskTC
+} from "./state/thunks";
 
 
 export type CondType = "All" | "Active" | "Completed"
@@ -67,12 +75,12 @@ const AppWithRedux = React.memo(() => {
 
 
         const changeTaskStatus = useCallback((changeTaskID: string, changeTaskIsDone: boolean, todolistId: string) =>
-                dispatch(changeTaskStatusAC(todolistId, changeTaskID, changeTaskIsDone))
+            dispatch(updateTaskTC(todolistId,changeTaskID,{status:changeTaskIsDone?2:0}))
             , [dispatch])
 
 
         const changeTaskTitle = useCallback((todolistId: string, taskId: string, changedTaskTitle: string) =>
-                dispatch(changeTaskTitleAC(todolistId, taskId, changedTaskTitle))
+            dispatch(updateTaskTC(todolistId,taskId,{title:changedTaskTitle}))
             , [dispatch])
 
 
@@ -92,7 +100,8 @@ const AppWithRedux = React.memo(() => {
 
 
         const changeTodolistTitle = useCallback((todolistId: string, changedTodolistTitle: string) =>
-                dispatch(changeTodolistTitleAC(todolistId, changedTodolistTitle))
+                // dispatch(changeTodolistTitleAC(todolistId, changedTodolistTitle))
+            dispatch(changeTodolistTitleTC(todolistId,changedTodolistTitle))
             , [dispatch])
 
 

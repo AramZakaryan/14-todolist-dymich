@@ -44,19 +44,17 @@ test("Correct todolist should be removed", () => {
 
 test("Correct todolist should change its title", () => {
 
-    // data
+    // DATA
+
     const updatedTodolistTitle: string = "Updated todolistTitle"
-    // const action: actionType = {
-    //     type: "changeTodolistTitle",
-    //     id: todolistId2,
-    //     updatedTodolistTitle: updatedTodolistTitle
-    // }
     const action: todolistActionType = changeTodolistTitleAC(todolistId2, updatedTodolistTitle)
 
-    // action
+    // ACTIONS
+
     const updatedState = todolistsReducer(initialState, action)
 
-    // expectation
+    // EXPECTATIONS
+
     expect(updatedState[0].todolistTitle).toBe("What to learn?")
     expect(updatedState[1].todolistTitle).toBe("Updated todolistTitle")
 

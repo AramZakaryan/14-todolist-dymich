@@ -34,8 +34,9 @@ export const Task = React.memo(
                 changeStatus(id, ev.currentTarget.checked, todolistId)
             , [changeStatus, id, todolistId])
 
-        const changeTaskTitleTemprorary = useCallback((changedTaskTitle: string) =>
+        const changeTaskTitleTemprorary = useCallback((changedTaskTitle: string) => {
                 changeTaskTitle(todolistId, id, changedTaskTitle)
+            }
             , [changeTaskTitle, todolistId, id])
 
         return (<>
