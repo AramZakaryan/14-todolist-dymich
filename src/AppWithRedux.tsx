@@ -33,6 +33,7 @@ import {
     setTasksTC,
     setTodolistsTC, updateTaskTC
 } from "./state/thunks";
+import {ThunkDispatch} from "redux-thunk";
 
 
 export type CondType = "All" | "Active" | "Completed"
@@ -51,7 +52,7 @@ export type todolistType = {
 const AppWithRedux = React.memo(() => {
 
 
-        const dispatch: Dispatch<AnyAction> | any = useDispatch()
+        const dispatch: ThunkDispatch<roofReducerType, unknown, AnyAction> = useDispatch()
 
         useEffect(() => {
             dispatch(setTodolistsTC())
