@@ -9,48 +9,79 @@ import {
 } from "./todolistsReduser";
 import {addTaskAC, updateTaskAC, removeTaskAC, setTasksAC, tasksActionType} from "./tasksReduser";
 import {roofReducerType} from "./store";
+import {ThunkAction} from "redux-thunk";
 
 
-type AllActionsType = todolistActionType | tasksActionType
+/**
+ * P.S. (Aram) Type of all possible actions, includes todolistActions and taskActions
+ */
+export type AllActionsType = todolistActionType | tasksActionType
+
+/**
+ * P.S. (Aram) Universal type of thunk actions
+ */
+type UniversalThunkActionType = ThunkAction<void, roofReducerType, unknown, AllActionsType>
 
 
 // TODOLISTS THUNK CREATORS
 
-export const setTodolistsTC = () => (dispatch: Dispatch<AllActionsType>) => {
-    api.getTodolists()
-        .then(response => dispatch(setTodolistsAC(response.data)))
-}
+/**
+ * P.S. (Aram) version 1. setTodolistsTC by non-async function
+ */
+// export const setTodolistsTC = (): UniversalThunkActionType =>
+//     (dispatch) => {
+//         api.getTodolists()
+//             .then(response => dispatch(setTodolistsAC(response.data)))
+//     }
 
-export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch<AllActionsType>) => {
-    api.deleteTodolist(todolistId)
-        .then(() => dispatch(remTodolistAC(todolistId)))
-}
+/**
+ * P.S. (Aram) version 2. setTodolistsTC by async function
+ */
+export const setTodolistsTC = (): UniversalThunkActionType =>
+    async (dispatch) => {
+        const response = await api.getTodolists()
+            dispatch(setTodolistsAC(response.data))
+    }
 
-export const addTodolistTC = (todolistTitle: string) => (dispatch: Dispatch<AllActionsType>) => {
-    api.createTodolist(todolistTitle)
-        .then(response => dispatch(addTodolistAC(response.data.data.item)))
-        // .then(() => dispatch(setTodolistsTC()))
-}
+export const removeTodolistTC = (todolistId: string): UniversalThunkActionType =>
+    (dispatch) => {
+        api.deleteTodolist(todolistId)
+            .then(() => dispatch(remTodolistAC(todolistId)))
+    }
 
-export const changeTodolistTitleTC = (todolistId: string, updatedTodolistTitle: string) => (dispatch: Dispatch<AllActionsType>) => {
-    api.updateTodolist(todolistId, updatedTodolistTitle)
-        .then(response => dispatch(changeTodolistTitleAC(todolistId, updatedTodolistTitle)))
-}
+export const addTodolistTC = (todolistTitle: string): UniversalThunkActionType =>
+    // (dispatch: Dispatch<AllActionsType>) => {
+    (dispatch) => {
+        api.createTodolist(todolistTitle)
+            // .then(response => dispatch(addTodolistAC(response.data.data.item)))
+            .then(() => dispatch(setTodolistsTC()))
+    }
+
+
+export const changeTodolistTitleTC = (todolistId: string, updatedTodolistTitle: string): UniversalThunkActionType =>
+    (dispatch) => {
+        api.updateTodolist(todolistId, updatedTodolistTitle)
+            .then(response => dispatch(changeTodolistTitleAC(todolistId, updatedTodolistTitle)))
+    }
 
 
 // TASKS THUNK CREATORS
 
-export const setTasksTC = (todolistId: string) => (dispatch: Dispatch<AllActionsType>) =>
-    api.getTasks(todolistId)
-        .then(response => dispatch(setTasksAC(todolistId, response.data.items)))
+export const setTasksTC = (todolistId: string): UniversalThunkActionType =>
+    (dispatch) =>
+        api.getTasks(todolistId)
+            .then(response => dispatch(setTasksAC(todolistId, response.data.items)))
 
-export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<AllActionsType>) =>
-    api.deleteTask(todolistId, taskId)
-        .then(() => dispatch(removeTaskAC(todolistId, taskId)))
+export const removeTaskTC = (todolistId: string, taskId: string): UniversalThunkActionType =>
+    (dispatch) =>
+        api.deleteTask(todolistId, taskId)
+            .then(() => dispatch(removeTaskAC(todolistId, taskId)))
 
-export const addTaskTC = (todolistId: string, newTaskTitle: string) => (dispatch: Dispatch<AllActionsType>) =>
-    api.createTask(todolistId, newTaskTitle)
-        .then(response => dispatch(addTaskAC(todolistId, response.data.data.item)))
+export const addTaskTC = (todolistId: string, newTaskTitle: string): UniversalThunkActionType =>
+    (dispatch) =>
+        api.createTask(todolistId, newTaskTitle)
+            .then(response => dispatch(addTaskAC(todolistId, response.data.data.item)))
+
 
 export type UpdateTaskThunkCreatorType = {
     title?: string
@@ -58,8 +89,9 @@ export type UpdateTaskThunkCreatorType = {
 }
 
 
-export const updateTaskTC = (todolistId: string, taskId: string, modelForThunk: UpdateTaskThunkCreatorType) =>
-    (dispatch: Dispatch<AllActionsType>, getState: () => roofReducerType) => {
+export const updateTaskTC = (todolistId: string, taskId: string, modelForThunk: UpdateTaskThunkCreatorType): UniversalThunkActionType =>
+    // (dispatch: Dispatch<AllActionsType>, getState: () => roofReducerType) => {
+    (dispatch, getState) => {
 
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
 

@@ -26,7 +26,7 @@ import {TaskFromAPIType, TodolistFromAPIType} from "./api/api";
 import {AnyAction, Dispatch} from "redux";
 import {
     addTaskTC,
-    addTodolistTC,
+    addTodolistTC, AllActionsType,
     changeTodolistTitleTC,
     removeTaskTC,
     removeTodolistTC,
@@ -52,7 +52,7 @@ export type todolistType = {
 const AppWithRedux = React.memo(() => {
 
 
-        const dispatch: ThunkDispatch<roofReducerType, unknown, AnyAction> = useDispatch()
+        const dispatch: ThunkDispatch<roofReducerType, unknown, AllActionsType> = useDispatch()
 
         useEffect(() => {
             dispatch(setTodolistsTC())
