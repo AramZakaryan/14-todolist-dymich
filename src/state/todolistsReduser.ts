@@ -2,11 +2,13 @@ import {CondType, todolistType} from "../App";
 import {v1} from "uuid";
 import {TodolistFromAPIType} from "../api/api";
 
+
+
 export type todolistActionType = remTodolistActionType
     | addTodolistActionType
     | changeTodolistTitleActionType
     | changeFilterCondActionType
-    | setTodolistsType
+    | setTodolistsActionType
 
 export type remTodolistActionType = ReturnType<typeof remTodolistAC>
 export const remTodolistAC = (todolistId: string) => ({
@@ -34,7 +36,7 @@ export const changeFilterCondAC = (todolistId: string, updatedFilterCond: CondTy
     updatedFilterCond
 }) as const
 
-export type setTodolistsType = ReturnType<typeof setTodolistsAC>
+export type setTodolistsActionType = ReturnType<typeof setTodolistsAC>
 // export const setTodolistsAC = (todolistsFromAPI: TodolistFromAPIType[]) => ({
 export const setTodolistsAC = (todolistsFromAPI: TodolistFromAPIType[]) => ({
     type: "SET-TODOLISTS",
@@ -88,3 +90,5 @@ export const todolistsReducer = (state: todolistType[] = initialState, action: t
             return state
     }
 }
+
+

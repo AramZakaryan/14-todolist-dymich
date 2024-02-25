@@ -1,6 +1,6 @@
 import {allTasksType} from "../App";
 import {v1} from "uuid";
-import {addTodolistActionType, remTodolistActionType, setTodolistsType} from "./todolistsReduser";
+import {addTodolistActionType, remTodolistActionType, setTodolistsActionType} from "./todolistsReduser";
 import {TaskFromAPIType} from "../api/api";
 import {TaskType} from "../Todolist";
 
@@ -9,7 +9,7 @@ export type tasksActionType = removeTaskActionType
     | updateTaskActionType
     | addTodolistActionType
     | remTodolistActionType
-    | setTodolistsType
+    | setTodolistsActionType
     | setTasksActionType
 
 

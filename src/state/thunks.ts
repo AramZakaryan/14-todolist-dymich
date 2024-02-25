@@ -1,30 +1,38 @@
 import {Dispatch} from "redux";
-import {api, TaskFromAPIType, UpdateTaskType} from "../api/api";
-import {addTodolistAC, changeTodolistTitleAC, remTodolistAC, setTodolistsAC} from "./todolistsReduser";
-import {addTaskAC, updateTaskAC, removeTaskAC, setTasksAC} from "./tasksReduser";
-import {useDispatch} from "react-redux";
-import {CondType} from "../App";
+import {api, UpdateTaskType} from "../api/api";
+import {
+    addTodolistAC,
+    changeTodolistTitleAC,
+    remTodolistAC,
+    setTodolistsAC,
+    setTodolistsActionType, todolistActionType
+} from "./todolistsReduser";
+import {addTaskAC, updateTaskAC, removeTaskAC, setTasksAC, tasksActionType} from "./tasksReduser";
 import {roofReducerType} from "./store";
+
+
+type AllActionsType = todolistActionType | tasksActionType
 
 
 // TODOLISTS THUNK CREATORS
 
-export const setTodolistsTC = () => (dispatch: Dispatch) => {
+export const setTodolistsTC = () => (dispatch: Dispatch<AllActionsType>) => {
     api.getTodolists()
         .then(response => dispatch(setTodolistsAC(response.data)))
 }
 
-export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
+export const removeTodolistTC = (todolistId: string) => (dispatch: Dispatch<AllActionsType>) => {
     api.deleteTodolist(todolistId)
         .then(() => dispatch(remTodolistAC(todolistId)))
 }
 
-export const addTodolistTC = (todolistTitle: string) => (dispatch: Dispatch) => {
+export const addTodolistTC = (todolistTitle: string) => (dispatch: Dispatch<AllActionsType>) => {
     api.createTodolist(todolistTitle)
         .then(response => dispatch(addTodolistAC(response.data.data.item)))
+        // .then(() => dispatch(setTodolistsTC()))
 }
 
-export const changeTodolistTitleTC = (todolistId: string, updatedTodolistTitle: string) => (dispatch: Dispatch) => {
+export const changeTodolistTitleTC = (todolistId: string, updatedTodolistTitle: string) => (dispatch: Dispatch<AllActionsType>) => {
     api.updateTodolist(todolistId, updatedTodolistTitle)
         .then(response => dispatch(changeTodolistTitleAC(todolistId, updatedTodolistTitle)))
 }
@@ -32,15 +40,15 @@ export const changeTodolistTitleTC = (todolistId: string, updatedTodolistTitle: 
 
 // TASKS THUNK CREATORS
 
-export const setTasksTC = (todolistId: string) => (dispatch: Dispatch) =>
+export const setTasksTC = (todolistId: string) => (dispatch: Dispatch<AllActionsType>) =>
     api.getTasks(todolistId)
         .then(response => dispatch(setTasksAC(todolistId, response.data.items)))
 
-export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) =>
+export const removeTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch<AllActionsType>) =>
     api.deleteTask(todolistId, taskId)
         .then(() => dispatch(removeTaskAC(todolistId, taskId)))
 
-export const addTaskTC = (todolistId: string, newTaskTitle: string) => (dispatch: Dispatch) =>
+export const addTaskTC = (todolistId: string, newTaskTitle: string) => (dispatch: Dispatch<AllActionsType>) =>
     api.createTask(todolistId, newTaskTitle)
         .then(response => dispatch(addTaskAC(todolistId, response.data.data.item)))
 
@@ -51,7 +59,7 @@ export type UpdateTaskThunkCreatorType = {
 
 
 export const updateTaskTC = (todolistId: string, taskId: string, modelForThunk: UpdateTaskThunkCreatorType) =>
-    (dispatch: Dispatch, getState: () => roofReducerType) => {
+    (dispatch: Dispatch<AllActionsType>, getState: () => roofReducerType) => {
 
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
 
@@ -75,8 +83,8 @@ export const updateTaskTC = (todolistId: string, taskId: string, modelForThunk: 
         api.updateTask(todolistId, taskId, updateTaskModel)
             .then(response => {
                 const {todoListId, id, title, status} = response.data.data.item // destructuring of response
-                dispatch(updateTaskAC(todoListId, id, {title, isDone:status===2}))
+                dispatch(updateTaskAC(todoListId, id, {title, isDone: status === 2}))
             })
-        
+
     }
 
